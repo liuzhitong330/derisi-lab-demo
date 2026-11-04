@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-11-04",
+  "paper": {
+    "title": "Molecular mimicry in multisystem inflammatory syndrome in children",
+    "doi": "10.1038/s41586-024-07722-4",
+    "source": "https://derisilab.ucsf.edu/pdfs/anderson2024.pdf",
+    "full_text": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11324515/",
+    "data_statement": "Dryad processed PhIP-seq data, article source-data supplements, raw TCR SRA; no dedicated MIS-C GitHub repository linked."
+  },
+  "github_search": {
+    "queries": ["s41586-024-07722-4 github", "Bodansky MIS-C github", "DeRisi PhIP", "SNX8 github"],
+    "verified_related_repository": "https://github.com/h-s-miller/phagepy",
+    "ownership_evidence": "Linked as analysis code in DeRisi-authored JCI Insight paper https://insight.jci.org/articles/view/174976; pyproject author Haleigh Miller UCSF, DeRisi lab people page identifies PhIP-seq methods role.",
+    "not_claimed": "Not identified as the exact software used to produce the 2024 MIS-C CSV files.",
+    "commit": "d600a664c69541f8b04fe47fdce166fe52c16f6f",
+    "analysis_module_sha256": "29400ca115cc8a78743f209a1f8df92bd2da501b0c49322af04df84c0aaf6396",
+    "inspected": ["README.md", "pyproject.toml", "phagepy/analysis.py", "phagepy/preprocessing.py"],
+    "execution": "Unchanged generate_SS_hits from the inspected analysis.py module, with a minimal AnnData-like numerical adapter implementing only its documented subset/obs/var/layers/obsm needs. No upstream preprocessing or raw-count reanalysis.",
+    "license": "No explicit license file or license field present. Do not redistribute repository code. Original wrapper fetches a separate pinned checkout; attribution remains explicit."
+  },
+  "dataset": {
+    "doi": "10.7272/Q6SJ1HVH",
+    "version": 293273,
+    "url": "https://datadryad.org/dataset/doi:10.7272/Q6SJ1HVH",
+    "metadata_api": "https://datadryad.org/api/v2/versions/293273/files",
+    "license": "CC0-1.0, https://spdx.org/licenses/CC0-1.0.html, verified dataset API field",
+    "download": "Actual files downloaded by ordinary browser links; API downloads 401 and direct file_stream curl 403. Official API SHA256 values verified for every file.",
+    "files": [
+      {"name": "Human_Proteome_MIS-C_patients.csv", "id": 3140008, "sha256": "599682c2eba758b91d88a8d15c147feba7553637025922730108ec15f6e53f4c", "used": true, "shape": [19997, 199]},
+      {"name": "Human_Proteome_at-risk_controls.csv", "id": 3140005, "sha256": "bc9de7b03040c0017f28d5890f6a4c22a1e5fb8588d1fd70c571bc7d0e8baab8", "used": true, "shape": [19997, 45]},
+      {"name": "SARS-CoV-2_Proteome_MIS-C_patients.csv", "id": 3140007, "sha256": "c546fae6740d00422b31252b47fb26de5cb34c7f3b394ce9b7cf5854b0eeb5fa", "used": false, "shape": [4592, 181]},
+      {"name": "SARS-CoV-2_Proteome_at-risk_controls.csv", "id": 3140004, "sha256": "2b1624582e567b8daaec8e5ceb558a4d84931390d6dd0367e294364e41bfb99d", "used": false, "shape": [4592, 45]},
+      {"name": "covid19lib_pepts_.fa", "id": 3140006, "sha256": "0866c14ab2e7924f5f7bf0961d286d1b797b17a7b1b72c44718a7bf78dc843f7", "used": false},
+      {"name": "README.md", "id": 3140012, "sha256": "d619c676585a463e5ef31c6bd72b1c5f497f947062e4c8eed854b63583f4613a", "used": "documentation"}
+    ],
+    "schema": "CSV first column gene, remaining columns deidentified study IDs. Per paper Methods: peptide reads summed by gene, +0.5-read pseudocount, converted to read percentages, divided by mean bead-only mock-IP read percentage. Entries are processed gene-level fold changes, not summed peptide fold-change ratios. No individual clinical covariate table in deposited files.",
+    "alias": {"LOC390937": "ERFL", "source": "https://www.ncbi.nlm.nih.gov/gene/390937"},
+    "sample_identity": "199 unique case IDs, 45 unique control IDs, groups disjoint; 19,997 identical unique gene rows. All values finite and nonnegative. Viral case IDs are a strict subset of 181 human case IDs, leaving 18 missing viral samples. Do not treat absent viral values as zero.",
+    "limits": ["Human and viral libraries use different fold-change denominators", "No raw reads or technical replicates", "No individual IVIG, collection time or linked orthogonal-assay metadata", "No aliquot availability", "Selected antigens already discovered in this cohort; descriptive planning, not independent validation"]
+  },
+  "analysis": {
+    "targets": ["SNX8", "ERFL", "KDELR1", "UBE3A"],
+    "selection": "Three paper-highlighted antigens and one previously reported comparator excluded from the paper's final set because of control reactivity; no novel-antigen discovery claimed.",
+    "rule": "Raw-FC arithmetic control mean + k population SD (ddof=0), strict value > cutoff. k=2,3,4,5; default3. Same convention as phagepy generate_SS_hits, not the paper's full antigen-selection pipeline or orthogonal-assay cutoff.",
+    "loo": "For each gene and k, omit each one of45 at-risk controls, recompute cutoff, classify199 case observations as above all45 cutoffs, above some, or above none. Evaluate each control against the other44 controls only, as already described in the paper. Added contribution is case-call omission sensitivity and interactive selection, not first use of held-out control scoring.",
+    "inference": "Leave-one-control-out sensitivity is a deterministic perturbation range, NOT a confidence interval or probability. Cases are not held out from antigen discovery; no independent validation.",
+    "key_caveat": "KDELR1 default cutoff0.944667 is below1 FC/mock-IP. Above the at-risk reference is not necessarily enriched above mock-IP; the interactive readout explicitly flags cutoffs below1. No universal FC>1 filter is imposed.",
+    "verification": "Upstream function result matches independently computed NumPy z scores and calls for all976 selected data values. Standard-library csv/statistics checker independently verifies976 raw values,16 scenarios and720 leave-one-out thresholds. PASS."
+  }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A reproducible sensitivity analysis of public MIS-C autoantibody measurements, inspired by the DeRisi Lab.">
+  <title>Exploratory Analyses Inspired by the DeRisi Lab</title>
+  <link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+  <main class="page">
+    <h1>Exploratory Analyses Inspired by the DeRisi Lab</h1>
+    <div class="byline">Cathy Liu · Biotechnology &amp; computational biology<br>Prepared for the DeRisi Lab, UCSF<br>Personal exploratory project · November 2026</div>
+    <nav class="section-nav" aria-label="Demo sections"><a href="#motivation">Question</a><a href="#a1">Signal explorer</a><a href="#a2">Follow-up selection</a><a href="#relevance">Relevance</a></nav>
+    <p>The DeRisi team's MIS-C study connects an infection to an immune response against the body's own proteins. A practical question sits between a broad antibody screen and a follow-up experiment: <strong>which specimen calls are stable, and which depend on the control reference?</strong></p>
+    <p>I built a small sensitivity explorer around the study's public PhIP-seq measurements. Change the screening cutoff, inspect individual specimens, and see whether removing just one control changes a call. The aim is to make follow-up choices inspectable, not to create a diagnostic test.</p>
+    <hr id="motivation">
+    <section aria-labelledby="how-heading">
+      <h2 id="how-heading">How it works</h2>
+      <p>Each point is one published specimen. The source analysis aggregates peptide reads by gene and reports fold changes over mock immunoprecipitation. For a selected antigen, a reference line is the mean of the 45 at-risk controls plus <em>k</em> control standard deviations. The shaded band shows how that line moves when each control is omitted in turn.</p>
+      <p class="quiet">This is a reanalysis of the discovery cohort: 199 MIS-C specimens and 45 controls. The three main antigens were already selected and validated in the paper. The additional UBE3A comparison illustrates why control behavior matters.</p>
+    </section>
+    <hr id="a1">
+    <section aria-labelledby="analysis-one-heading">
+      <h2 id="analysis-one-heading">Analysis 1 — Does the call survive a different control reference?</h2>
+      <div class="experiment"><div class="exp-label">Control sensitivity</div><div class="exp-title">A strong signal and a stable call are not the same thing</div><p>Select an antigen, then change the cutoff. Teal points remain above every leave-one-control-out threshold; outlined points change classification; gray points remain below. These are descriptive screening categories, not clinical labels.</p></div>
+      <div class="panel">
+        <form class="searchbar" id="target-form"><label for="target-select">Antigen</label><select id="target-select"><option>SNX8</option><option>ERFL</option><option>KDELR1</option><option>UBE3A</option></select><label for="cutoff">Cutoff</label><select id="cutoff"><option value="2">Mean + 2 SD</option><option value="3" selected>Mean + 3 SD</option><option value="4">Mean + 4 SD</option><option value="5">Mean + 5 SD</option></select></form>
+        <div class="chips" id="suggestions"><span>Compare:</span></div>
+        <svg id="hero-viz" class="viz" viewBox="0 0 600 360" role="img" aria-label="Specimen-level fold-change measurements and control-sensitive threshold band"></svg>
+        <div class="plot-legend"><span class="dot teal"></span> stable above <span class="dot hollow"></span> reference-sensitive <span class="dot gray"></span> stable below</div>
+        <div class="readout" id="readout" aria-live="polite"></div>
+        <figcaption>Vertical position: log10(1 + gene-level fold change), with tick labels in original units. Horizontal jitter separates overlapping specimens only. Black dashed line: all-control cutoff; gray band: 45 leave-one-out cutoffs. Control points are calibration data, not an independent test set.</figcaption>
+        <details class="specimen-detail"><summary>Inspect an individual specimen</summary><label for="sample-select">Published identifier</label> <select id="sample-select"></select><p id="sample-detail" aria-live="polite"></p></details>
+      </div>
+      <div class="metric-row"><div class="metric"><span class="metric-val" id="metric-one">—</span><span class="metric-desc">MIS-C above all-control cutoff</span></div><div class="metric"><span class="metric-val" id="metric-two">—</span><span class="metric-desc">MIS-C calls change with a control omission</span></div><div class="metric"><span class="metric-val" id="metric-three">45</span><span class="metric-desc" id="metric-three-label">controls in the reference</span></div></div>
+      <p id="influence-note" class="quiet"></p>
+    </section>
+    <hr id="a2">
+    <section aria-labelledby="analysis-two-heading">
+      <h2 id="analysis-two-heading">Analysis 2 — Choose informative specimens, not only the largest signals</h2>
+      <div class="experiment"><div class="exp-label">Comparison</div><div class="exp-title">Keep stable and threshold-sensitive groups visible</div></div>
+      <div class="panel"><span class="label-inline">MIS-C specimens at the current cutoff · click an antigen</span><div class="comparison" id="comparison"></div><figcaption>Each row contains all 199 MIS-C specimens. Segments use the same categories as the plot above. This is not a ranking of biological importance or assay validity.</figcaption></div>
+      <p><strong>What this lets the lab do.</strong> Inspect candidates for an orthogonal assay across stable-above, reference-sensitive and stable-below groups. That contrast can test whether a screening boundary corresponds to full-length protein binding, instead of testing only the most extreme signals.</p>
+      <div class="candidate-tools"><label for="category">Show selected antigen's</label> <select id="category"><option value="sensitive">reference-sensitive specimens</option><option value="above">stable-above specimens</option><option value="below">stable-below specimens</option></select><button id="download" type="button">Download all calls (CSV)</button></div>
+      <p id="candidate-count" class="quiet" aria-live="polite"></p>
+      <div class="table-scroll"><table><caption class="sr-only">Selected antigen specimen calls, sorted by proximity to the all-control cutoff</caption><thead><tr><th>Specimen</th><th>Fold change</th><th>Control z</th><th>LOO z range</th></tr></thead><tbody id="candidates"></tbody></table></div>
+      <p class="quiet">Up to six examples nearest the current cutoff. This is an inspectable selection rule, not a claim about remaining material, treatment status or experimental outcomes. The download retains every MIS-C specimen and all four antigens at the selected cutoff.</p>
+      <h2>One follow-up question</h2>
+      <p>Would specimens that are sensitive to the control reference also disagree with an orthogonal full-length protein assay? A small, balanced panel spanning the three groups could be informative. Check pretreatment status and specimen availability first; include appropriate binding and epitope controls. The paper already performed orthogonal validation, so this would be a targeted extension, not its first confirmation.</p>
+    </section>
+    <hr id="relevance">
+    <section aria-labelledby="relevance-heading">
+      <h2 id="relevance-heading">Why this matters for the lab</h2>
+      <p>The work connects broad immunological screens to focused experiments. A transparent view of control dependence can help separate a reproducible screening call from a borderline one before committing additional specimens to follow-up. It does not establish cross-reactivity, pathogenicity, or a current internal bottleneck in the lab.</p>
+      <h2>What I would bring</h2>
+      <p><strong>Where Cathy adds value.</strong> My experience validating analytical methods and documenting experimental results has made me attentive to controls and ambiguous measurements. I would bring that care, practical exposure to cell culture and ELISA, and computational analysis experience to organizing reproducible results and proposing focused follow-up comparisons. This demo is not evidence of hands-on PhIP-seq experience.</p>
+      <h2>Methods note</h2>
+      <p class="methods-note">The cutoff and leave-one-control-out procedure are an exploratory extension. A control z score is not a normal-theory p value, and the leave-one-out band is not a confidence interval. This is neither an independent validation cohort nor a reproduction of the paper's classifier.</p>
+      <details><summary>Data, code and limitations</summary>
+        <p class="methods-note">Data: <a href="https://datadryad.org/dataset/doi:10.7272/Q6SJ1HVH">Bodansky et al., Dryad (CC0)</a>. Research context: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11324515/">Nature, 2024</a>. We retain processed gene-level fold changes without renormalizing them. Clinical treatment, batch and orthogonal-assay measurements are absent from these matrices; no IVIG adjustment or paired binding-assay analysis is performed. Findings may reflect cohort composition and treatment as well as biology. The paper's own untreated-subset and orthogonal-assay results remain separate evidence.</p>
+        <p class="methods-note">The lab-associated <a href="https://github.com/h-s-miller/phagepy/tree/d600a664c69541f8b04fe47fdce166fe52c16f6f">PhagePy repository (pinned commit)</a> is linked from a separate DeRisi-team publication, not supplied as this MIS-C paper's official code. Its inspected control-based hit function is run on the compatible processed layer, with an independent numerical parity check. No upstream source is redistributed.</p>
+        <p class="methods-note"><a href="README.md">README and reproduction instructions</a> · <a href="results.json">Computed results</a> · <a href="specimen_calls.csv" download>Full specimen table</a> · <a href="provenance.json">Provenance and hashes</a> · <a href="https://github.com/liuzhitong330/derisi-lab-demo">GitHub repository</a></p>
+        <p class="methods-note">Prepared with AI-assisted research, programming and writing. Public-data reanalysis only; no affiliation, endorsement, clinical use or claim of unaided implementation. Numerical checks and limitations are documented in the repository.</p>
+      </details>
+    </section>
+    <footer>Cathy Liu · <a href="mailto:cathyliu014@gmail.com">cathyliu014@gmail.com</a> · <a href="tel:+14152163799">415-216-3799</a><br>Personal exploratory analysis · Not a diagnostic or treatment tool</footer>
+  </main>
+  <script src="data.js?v=1"></script><script src="app.js?v=1"></script>
+</body></html>

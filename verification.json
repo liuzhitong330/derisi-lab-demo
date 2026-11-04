@@ -1,0 +1,32 @@
+{
+  "unchanged_upstream_function_executed": "generate_SS_hits",
+  "adapter": "Minimal AnnData-compatible numeric adapter, not the upstream raw-count loading pipeline",
+  "full_matrix_z_parity": true,
+  "full_matrix_hit_parity": true,
+  "spot_checks": [
+    {
+      "gene": "SNX8",
+      "sample": "CHB1001004323",
+      "standard_library_z": 2.5769750726038594,
+      "phagepy_z": 2.57697507260386
+    },
+    {
+      "gene": "ERFL",
+      "sample": "CHB1001004323",
+      "standard_library_z": 3.0873770624551002,
+      "phagepy_z": 3.0873770624551002
+    },
+    {
+      "gene": "KDELR1",
+      "sample": "CHB1001004323",
+      "standard_library_z": -0.7670268493949716,
+      "phagepy_z": -0.7670268493949706
+    },
+    {
+      "gene": "UBE3A",
+      "sample": "CHB1001004323",
+      "standard_library_z": 5.833786218204078,
+      "phagepy_z": 5.833786218204078
+    }
+  ]
+}
