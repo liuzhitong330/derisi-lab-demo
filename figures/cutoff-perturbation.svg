@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="320" viewBox="0 0 680 320" role="img">
+<title>How far does the reference move?</title><desc>All-control cutoff and leave-one-control-out range for four antigens at k equals three; processed gene-level fold change over mock-IP, linear axis.</desc>
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#222}.heading{font-family:Georgia,serif;font-size:19px}.note{font-size:11px;fill:#555}</style>
+<rect width="100%" height="100%" fill="#fff"/>
+<text class="heading" x="24" y="30">How far does the reference move?</text>
+<line x1="110.0" y1="60" x2="110.0" y2="245" stroke="#e5e5e5"/>
+<text x="110.0" y="263" text-anchor="middle">0</text>
+<line x1="237.5" y1="60" x2="237.5" y2="245" stroke="#e5e5e5"/>
+<text x="237.5" y="263" text-anchor="middle">1</text>
+<line x1="365.0" y1="60" x2="365.0" y2="245" stroke="#e5e5e5"/>
+<text x="365.0" y="263" text-anchor="middle">2</text>
+<line x1="492.5" y1="60" x2="492.5" y2="245" stroke="#e5e5e5"/>
+<text x="492.5" y="263" text-anchor="middle">3</text>
+<line x1="620.0" y1="60" x2="620.0" y2="245" stroke="#e5e5e5"/>
+<text x="620.0" y="263" text-anchor="middle">4</text>
+<text x="24" y="86">SNX8</text>
+<line x1="402.1332269419659" y1="82" x2="439.12290445291245" y2="82" stroke="#aaa" stroke-width="8"/>
+<circle cx="436.31369928361767" cy="82" r="4" fill="#1f7a8c"/>
+<text class="note" x="449.12290445291245" y="86">2.291–2.581</text>
+<text x="24" y="131">ERFL</text>
+<line x1="285.63507375061863" y1="127" x2="295.46779697708587" y2="127" stroke="#aaa" stroke-width="8"/>
+<circle cx="293.8385699367824" cy="127" r="4" fill="#1f7a8c"/>
+<text class="note" x="305.46779697708587" y="131">1.378–1.455</text>
+<text x="24" y="176">KDELR1</text>
+<line x1="224.56544816217217" y1="172" x2="231.02419167278708" y2="172" stroke="#aaa" stroke-width="8"/>
+<circle cx="230.4450134939759" cy="172" r="4" fill="#1f7a8c"/>
+<text class="note" x="241.02419167278708" y="176">0.899–0.949</text>
+<text x="24" y="221">UBE3A</text>
+<line x1="510.3571810922064" y1="217" x2="570.4207268149845" y2="217" stroke="#aaa" stroke-width="8"/>
+<circle cx="566.2278321594079" cy="217" r="4" fill="#1f7a8c"/>
+<text class="note" x="580.4207268149845" y="221">3.140–3.611</text>
+<text class="note" x="24" y="285">Point: all-control cutoff · line: omitted-control range, NOT a confidence interval.</text>
+<text class="note" x="24" y="305">Gene-level FC/mock-IP. A cutoff below 1 does not establish binding or enrichment.</text>
+</svg>
