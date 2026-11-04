@@ -109,11 +109,5 @@
   $('cutoff').addEventListener('change',e=>{k=Number(e.target.value);render();});
   $('category').addEventListener('change',()=>candidates(data.genes.find(x=>x.gene===marker)));
   $('sample-select').addEventListener('change',e=>showSample(data.genes.find(x=>x.gene===marker),e.target.value));
-  $('download').addEventListener('click',()=>{
-    const rows=[['gene','sample_id','cohort','k','gene_level_FC_mockIP','all_control_z','loo_z_min','loo_z_max','above_n_of_45','reference_category']];
-    for(const g of data.genes)for(const s of g.cases){const st=stats(g,s);rows.push([g.gene,s.id,'MIS-C',k,s.fc,st.z,st.min,st.max,st.n,names[st.category]]);}
-    const blob=new Blob([rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n')+'\n'],{type:'text/csv;charset=utf-8'});
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`derisi-reference-calls-k${k}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  });
   render();
 }());
